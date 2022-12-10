@@ -3,7 +3,13 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/time.h>
 
+double now() {
+  struct timeval tv;
+  gettimeofday(&tv, 0);
+  return tv.tv_sec + tv.tv_usec / 1000000.0;
+}
 unsigned int xorbuf(unsigned int *buffer, int size) {
     unsigned int result = 0;
     for (int i = 0; i < size; i++) {
@@ -14,7 +20,7 @@ unsigned int xorbuf(unsigned int *buffer, int size) {
 void read_file(char *filename, int block_size, int block_count){
 	int buf_size = block_size / 4; // 4 because int
 	unsigned int buf[buf_size];
-	unsigned int xor = 0;
+	unsigned int xor;
 	int fd  = open(filename,O_RDONLY);
 	if (fd == -1) {
 		printf("Cannot open %s\n", filename);
@@ -25,19 +31,26 @@ void read_file(char *filename, int block_size, int block_count){
 		if (r < 0){
 			break;
 		}
-		xor ^= xorbuf(buf, buf_size);
+		if (i == 0){
+			xor = xorbuf(buf, buf_size);
+		} else{
+			xor ^= xorbuf(buf, buf_size);
+		}
 	}
 	printf("%08x\n", xor);
 	close(fd);
 }
 
 void write_file(char *filename, int block_size, int block_count){
+	double start = now();
 	char buf[block_size];
-	int fd  = open(filename,O_WRONLY | O_CREAT);
+	int fd  = open(filename,O_WRONLY | O_CREAT, 0644);
 	for (int i =0; i < block_count; i++){
 		write(fd,buf,block_size);
 	}
 	close(fd);
+	double end = now();
+	printf("Write speed: %f MiB/s\n", (float) (block_size*block_count/ ((end - start) * 1000000)));
 }
 
 int main (int argc,char *argv[]) {
