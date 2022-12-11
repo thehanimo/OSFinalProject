@@ -30,7 +30,7 @@ void read_file(char *filename, int block_size, unsigned int *out_xor, unsigned i
 	int block_count = 0;
 	int r;
 	double start = now();
-	while ((r=read(fd,buf,block_size)) > 0){
+	while ((r=read(fd,buf,block_size)) > 0 && now() - start < 15){
 		block_count += 1;
 		xor ^= xorbuf(buf, buf_size);
 	}
