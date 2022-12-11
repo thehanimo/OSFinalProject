@@ -18,6 +18,7 @@ unsigned int xorbuf(unsigned int *buffer, int size) {
     return result;
 }
 void read_file(char *filename, int block_size, int block_count){
+	double start = now();
 	int buf_size = block_size / 4; // 4 because int
 	unsigned int buf[buf_size];
 	unsigned int xor;
@@ -38,6 +39,8 @@ void read_file(char *filename, int block_size, int block_count){
 		}
 	}
 	printf("%08x\n", xor);
+	double end = now();
+	printf("Read speed: %f MiB/s\n", (float) (block_size*block_count/ ((end - start) * 1000000)));
 	close(fd);
 }
 
