@@ -40,7 +40,7 @@ void read_file(char *filename, int block_size, int block_count){
 	}
 	printf("%08x\n", xor);
 	double end = now();
-	printf("Read speed: %f MiB/s\n", (float) (block_size*block_count/ ((end - start) * 1000000)));
+	printf("Read speed: %f MiB/s\n", block_size / 1000000.0 * block_count / (end - start));
 	close(fd);
 }
 
@@ -53,7 +53,7 @@ void write_file(char *filename, int block_size, int block_count){
 	}
 	close(fd);
 	double end = now();
-	printf("Write speed: %f MiB/s\n", (float) (block_size*block_count/ ((end - start) * 1000000)));
+	printf("Write speed: %f MiB/s\n", block_size / 1000000.0 * block_count / (end - start));
 }
 
 int main (int argc,char *argv[]) {

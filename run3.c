@@ -35,7 +35,7 @@ unsigned int read_file(char *filename, int block_size){
 	}
 	printf("%08x\n", xor);
 	close(fd);
-	return block_size * block_count;
+	return block_count;
 }
 
 void write_file(char *filename, int block_size, int block_count){
@@ -55,9 +55,9 @@ int main (int argc,char *argv[]) {
    char* filename = argv[1];
    int block_size = atoi(argv[2]);
    unsigned int start = now();
-   unsigned int file_size = read_file(filename,block_size);
+   unsigned int block_count = read_file(filename,block_size);
    unsigned int end = now();
-   printf("Read speed: %f MiB/s\n", (float) (file_size / ((end - start) * 1000000)));
+   printf("Read speed: %f MiB/s\n", block_size / 1000000.0 * block_count / (end - start));
   
    return 0;
 }
