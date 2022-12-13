@@ -10,45 +10,41 @@ double now() {
   gettimeofday(&tv, 0);
   return tv.tv_sec + tv.tv_usec / 1000000.0;
 }
-unsigned int xorbuf(unsigned int *buffer, int size) {
+unsigned int xorbuf(unsigned int *buffer, unsigned int size) {
     unsigned int result = 0;
-    for (int i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         result ^= buffer[i];
     }
     return result;
 }
-void read_file(char *filename, int block_size, int block_count){
+
+void read_file(char *filename, unsigned int block_size, unsigned int block_count){
 	double start = now();
-	int buf_size = block_size / 4; // 4 because int
+	unsigned int buf_size = block_size / 4; // 4 because int
 	unsigned int buf[buf_size];
-	unsigned int xor;
+	unsigned int xor = 0;
 	int fd  = open(filename,O_RDONLY);
 	if (fd == -1) {
 		printf("Cannot open %s\n", filename);
 		return;
 	}
-	for (int i = 0; i < block_count; i++){
-		int r = read(fd,buf,block_size);
-		if (r < 0){
-			break;
-		}
-		if (i == 0){
-			xor = xorbuf(buf, buf_size);
-		} else{
-			xor ^= xorbuf(buf, buf_size);
-		}
+	unsigned int blocks_read = 0;
+	unsigned int bytes_read;
+	while ((bytes_read=read(fd,buf,block_size)) > 0 && blocks_read < block_count){
+		xor ^= xorbuf(buf, bytes_read / 4);
+		blocks_read += 1;
 	}
-	printf("%08x\n", xor);
-	double end = now();
-	printf("Read speed: %f MiB/s\n", block_size / 1000000.0 * block_count / (end - start));
 	close(fd);
+	double end = now();
+	printf("%08x\n", xor);
+	printf("Read speed: %f MiB/s\n", block_size / 1000000.0 * blocks_read / (end - start));
 }
 
 void write_file(char *filename, int block_size, int block_count){
 	double start = now();
 	char buf[block_size];
 	int fd  = open(filename,O_WRONLY | O_CREAT, 0644);
-	for (int i =0; i < block_count; i++){
+	for (unsigned int i =0; i < block_count; i++){
 		write(fd,buf,block_size);
 	}
 	close(fd);
@@ -63,8 +59,8 @@ int main (int argc,char *argv[]) {
    }
    char* filename = argv[1];
    char flag = argv[2][1];
-   int block_size = atoi(argv[3]);
-   int block_count = atoi(argv[4]);
+   unsigned int block_size = atoi(argv[3]);
+   unsigned int block_count = atoi(argv[4]);
    if (flag == 'r'){
    	read_file(filename,block_size,block_count);
    }
@@ -72,7 +68,7 @@ int main (int argc,char *argv[]) {
    	write_file(filename,block_size,block_count);
    }
    else{
-   	printf("Invalid flag; please use -w for writing, or -w for writing.");
+   	printf("Invalid flag; please use -w for writing, or -r for reading.");
    }
   
    return 0;

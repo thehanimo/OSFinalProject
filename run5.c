@@ -10,30 +10,22 @@ double now() {
   gettimeofday(&tv, 0);
   return tv.tv_sec + tv.tv_usec / 1000000.0;
 }
-unsigned int xorbuf(unsigned int *buffer, int size) {
-    unsigned int result = 0;
-    for (int i = 0; i < size; i++) {
-        result ^= buffer[i];
-    }
-    return result;
-}
-void read_file(char *filename, int block_size, int block_count){
+
+void read_file(char *filename, unsigned int block_size, unsigned int block_count){
 	double start = now();
-	int buf_size = block_size / 4; // 4 because int
+	unsigned int buf_size = block_size / 4; // 4 because int
 	unsigned int buf[buf_size];
-	unsigned int xor;
 	int fd  = open(filename,O_RDONLY);
 	if (fd == -1) {
 		printf("Cannot open %s\n", filename);
 		return;
 	}
-	for (int i = 0; i < block_count; i++){
-		int r = read(fd,buf,block_size);
+	for (unsigned int i = 0; i < block_count; i++){
+		unsigned int r = read(fd,buf,block_size);
 		if (r < 0){
 			break;
 		}
 	}
-	printf("%08x\n", xor);
 	double end = now();
 	printf("Read speed: %f MiB/s\n", (float) (block_count/ ((end - start) * 1000000)));
 	printf("Read speed: %f Read Calls/s\n", (float) (block_count/ ((end - start) * 1000)));
@@ -42,29 +34,27 @@ void read_file(char *filename, int block_size, int block_count){
 	close(fd);
 }
 
-void lseek_file(char *filename, int block_size, int block_count){
+void lseek_file(char *filename, unsigned int block_size, unsigned int block_count){
 	double start = now();
-	int buf_size = block_size / 4; // 4 because int
+	unsigned int buf_size = block_size / 4; // 4 because int
 	unsigned int buf[buf_size];
-	unsigned int xor;
 	int fd  = open(filename,O_RDONLY);
 	if (fd == -1) {
 		printf("Cannot open %s\n", filename);
 		return;
 	}
-	for (int i = 0; i < block_count; i++){
-		int r = lseek(fd,0,SEEK_SET);
+	for (unsigned int i = 0; i < block_count; i++){
+		unsigned int r = lseek(fd,0,SEEK_SET);
 		if (r < 0){
 			break;
 		}
 	}
-	printf("%08x\n", xor);
+	close(fd);
 	double end = now();
 	printf("Read speed: %f MiB/s\n", (float) (block_count/ ((end - start) * 1000000)));
 	printf("%f lseek Calls/s\n", (float) (block_count/ ((end - start) * 1000)));
 	printf("Time Taken: %f seconds\n", (float) ((end - start)));
 	printf("Total Calls: %f\n", (float) (block_count));
-	close(fd);
 }
 
 int main (int argc,char *argv[]) {
@@ -74,8 +64,8 @@ int main (int argc,char *argv[]) {
    }
    char* filename = argv[1];
    char flag = argv[2][1];
-   int block_size = atoi(argv[3]);
-   int block_count = atoi(argv[4]);
+   unsigned int block_size = atoi(argv[3]);
+   unsigned int block_count = atoi(argv[4]);
    if (flag == 'r'){
    	read_file(filename,block_size,block_count);
    }
