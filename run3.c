@@ -34,7 +34,7 @@ unsigned int read_file(char *filename, unsigned int block_size){
 		block_count += 1;
 		xor ^= xorbuf(buf, bytes_read / 4);
 	}
-	printf("%08x\n", xor);
+	printf("XOR: %08x ", xor);
 	close(fd);
 	return block_count;
 }

@@ -75,8 +75,7 @@ void read_file_threaded(unsigned int block_size, char *filename, unsigned int th
 	}
 	close(fd);
 	double end = now();
-	printf("%08x\n", xor);
-	printf("Read speed: %f MiB/s\n", bytes_read / 1024.0 / 1024.0 / (end - start));
+	printf("XOR: %08x Read speed: %f MiB/s\n", xor, bytes_read / 1024.0 / 1024.0 / (end - start));
 }
 
 int main(int argc, char *argv[]) {

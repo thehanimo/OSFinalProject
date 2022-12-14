@@ -37,8 +37,7 @@ void read_file(char *filename, unsigned int block_size, unsigned int block_count
 	}
 	close(fd);
 	double end = now();
-	printf("%08x\n", xor);
-	printf("Read speed: %f MiB/s\n", block_size / 1024.0 / 1024.0 * blocks_read / (end - start));
+	printf("XOR: %08x Read speed: %f MiB/s\n", xor, block_size / 1024.0 / 1024.0 * blocks_read / (end - start));
 }
 
 void write_file(char *filename, int block_size, int block_count){
