@@ -58,7 +58,7 @@ int main (int argc,char *argv[]) {
    unsigned int start = now();
    unsigned int block_count = read_file(filename,block_size);
    unsigned int end = now();
-   printf("Read speed: %f MiB/s\n", block_size / 1000000.0 * block_count / (end - start));
+   printf("Read speed: %f MiB/s\n", block_size / 1024.0 / 1024.0 * block_count / (end - start));
   
    return 0;
 }

@@ -68,7 +68,7 @@ int main (int argc,char *argv[]) {
 	write_file(filename,block_size,out_block_count*2);
 	read_file(filename,block_size,&out_xor,&out_block_count,&read_time);
    }
-   printf("XOR: %08x Block Count: %u File size: %u Read speed: %f MiB/s\n", out_xor, out_block_count, out_block_count * block_size, out_block_count / 1000000.0 * block_size / read_time);
+   printf("XOR: %08x Block Count: %u File size: %u Read speed: %f MiB/s\n", out_xor, out_block_count, out_block_count * block_size, out_block_count / 1024.0 / 1024.0 * block_size / read_time);
   
    return 0;
 }

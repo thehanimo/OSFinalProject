@@ -27,8 +27,7 @@ void read_file(char *filename, unsigned int block_size, unsigned int block_count
 		}
 	}
 	double end = now();
-	printf("Read speed: %f MiB/s\n", (float) (block_count/ ((end - start) * 1000000)));
-	printf("Read speed: %f Read Calls/s\n", (float) (block_count/ ((end - start) * 1000)));
+	printf("Read speed: %f MiB/s\n", (float) (block_count / 1024.0 / 1024.0 / (end - start));
 	printf("Time Taken: %f seconds\n", (float) ((end - start)));
 	printf("Total Calls: %f \n", (float) (block_count));
 	close(fd);
@@ -51,8 +50,7 @@ void lseek_file(char *filename, unsigned int block_size, unsigned int block_coun
 	}
 	close(fd);
 	double end = now();
-	printf("Read speed: %f MiB/s\n", (float) (block_count/ ((end - start) * 1000000)));
-	printf("%f lseek Calls/s\n", (float) (block_count/ ((end - start) * 1000)));
+	printf("Read speed: %f MiB/s\n", (float) (block_count / 1024.0 / 1024.0 / (end - start)));
 	printf("Time Taken: %f seconds\n", (float) ((end - start)));
 	printf("Total Calls: %f\n", (float) (block_count));
 }

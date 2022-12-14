@@ -10,6 +10,7 @@ double now() {
   gettimeofday(&tv, 0);
   return tv.tv_sec + tv.tv_usec / 1000000.0;
 }
+
 unsigned int xorbuf(unsigned int *buffer, unsigned int size) {
     unsigned int result = 0;
     for (unsigned int i = 0; i < size; i++) {
@@ -37,7 +38,7 @@ void read_file(char *filename, unsigned int block_size, unsigned int block_count
 	close(fd);
 	double end = now();
 	printf("%08x\n", xor);
-	printf("Read speed: %f MiB/s\n", block_size / 1000000.0 * blocks_read / (end - start));
+	printf("Read speed: %f MiB/s\n", block_size / 1024.0 / 1024.0 * blocks_read / (end - start));
 }
 
 void write_file(char *filename, int block_size, int block_count){
@@ -49,7 +50,7 @@ void write_file(char *filename, int block_size, int block_count){
 	}
 	close(fd);
 	double end = now();
-	printf("Write speed: %f MiB/s\n", block_size / 1000000.0 * block_count / (end - start));
+	printf("Write speed: %f MiB/s\n", block_size / 1024.0 / 1024.0 * block_count / (end - start));
 }
 
 int main (int argc,char *argv[]) {
