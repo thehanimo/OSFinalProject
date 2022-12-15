@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 {
 	if (argc != 5)
 	{
-		printf("incorrect number of inputs please format in ./run <filename> [-r|-w] <block_size> <block_count>");
+		printf("incorrect number of inputs please format in ./run5 <filename> [-r|-w] <block_size> <block_count>");
 		return 0;
 	}
 	char *filename = argv[1];

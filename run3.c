@@ -44,22 +44,11 @@ unsigned int read_file(char *filename, unsigned int block_size)
 	return block_count;
 }
 
-void write_file(char *filename, unsigned int block_size, unsigned int block_count)
-{
-	char buf[block_size];
-	int fd = open(filename, O_WRONLY | O_CREAT);
-	for (unsigned int i = 0; i < block_count; i++)
-	{
-		write(fd, buf, block_size);
-	}
-	close(fd);
-}
-
 int main(int argc, char *argv[])
 {
 	if (argc != 3)
 	{
-		printf("incorrect number of inputs please format in ./run2 <filename> <block_size>");
+		printf("incorrect number of inputs please format in ./run3 <filename> <block_size>");
 		return 0;
 	}
 	char *filename = argv[1];
