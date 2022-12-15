@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("Invalid flag; please use -w for writing, or -w for writing.");
+		printf("Invalid flag; please use -r for read system calls, or -l for lseek calls.");
 	}
 
 	return 0;
