@@ -6,7 +6,6 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <sys/stat.h>
-#include <math.h>
 
 double now() {
   struct timeval tv;
@@ -96,7 +95,7 @@ int main(int argc, char *argv[]) {
 	stat(filename, &st);
     unsigned int block_size = atoi(argv[2]);
 	unsigned int thread_count = atoi(argv[3]);
-	unsigned int blocks_per_thread = ceil(ceil(st.st_size / block_size) / thread_count) + 1;
+	unsigned int blocks_per_thread = (st.st_size / block_size + 1) / thread_count + 1;
 	read_file_threaded(block_size, blocks_per_thread, filename, thread_count);
 	
 	return 0;
